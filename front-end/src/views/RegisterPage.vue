@@ -7,13 +7,17 @@
           <div class="tagline">Open source task management tool</div>
         </div>
         <form @submit.prevent="submitForm">
+          <div v-show="errorMessage" class="alert alert-danger failed">{{errorMessage}}</div>
           <div class="form-group">
+            <label for="username">Username</label>
             <input type="text" class="form-control" id="username" v-model="form.username">
           </div>
           <div class="form-group">
+            <label for="emailAddress">Email address</label>
             <input type="email" class="form-control" id="emailAddress" v-model="form.emailAddress">
           </div>
           <div class="form-group">
+            <label for="password">Password</label>
             <input type="password" class="form-control" id="password" v-model="form.password">
           </div>
           <button type="submit" class="btn btn-primary btn-block">Create account</button>
@@ -35,6 +39,8 @@
 </template>
 
 <script>
+import registrationService from '@/services/registration'
+
 export default {
   name: 'RegisterPage',
   data: function() {
@@ -43,11 +49,19 @@ export default {
         username: '',
         emailAddress: '',
         password: ''
-      }
+      },
+      errorMessage: ''
     }
   },
   methods: {
     submitForm() {
+      // TODO : 데이터 검증하기
+      registrationService.register(this.form).then(() => {
+        this.$router.push({name: 'LoginPage'})
+      }).catch((error) => {
+        this.errorMessage = 'Failed to register user. Reason: ' +
+        (error.message ? error.message : 'Unknown') + '.'
+      })
     }
   }
 }
@@ -68,7 +82,15 @@ export default {
     margin: 0 auto;
   }
 }
-
+.register-form {
+  .form-group label {
+    font-weight: bold;
+    color: #555;
+  }
+  .accept-terms {
+    margin: 20px 0 40px 0;
+  }
+}
 .footer {
   width: 100%;
   font-size: 13px;
