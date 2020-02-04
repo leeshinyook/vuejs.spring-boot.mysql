@@ -40,6 +40,7 @@
 
 <script>
 import registrationService from '@/services/registration'
+import {required, email, minLength, maxLength, alphaNum } from 'vuelidate/lib/validators'
 
 export default {
   name: 'RegisterPage',
@@ -55,6 +56,10 @@ export default {
   },
   methods: {
     submitForm() {
+      this.$v.$touch()
+      if(this.$v.$invalid) {
+        return;
+      }
       // TODO : 데이터 검증하기
       registrationService.register(this.form).then(() => {
         this.$router.push({name: 'LoginPage'})
@@ -62,6 +67,27 @@ export default {
         this.errorMessage = 'Failed to register user. Reason: ' +
         (error.message ? error.message : 'Unknown') + '.'
       })
+    }
+  },
+  validations: {
+    form: {
+      username: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(50),
+        alphaNum
+      },
+      emailAddress: {
+        required,
+        email,
+        maxLength: maxLength(50)
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+        maxLength: maxLength(30)
+      }
+
     }
   }
 }
