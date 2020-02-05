@@ -40,11 +40,11 @@
 
 <script>
 import registrationService from '@/services/registration'
-import {required, email, minLength, maxLength, alphaNum } from 'vuelidate/lib/validators'
+import { required, email, minLength, maxLength, alphaNum } from 'vuelidate/lib/validators'
 
 export default {
   name: 'RegisterPage',
-  data: function() {
+  data: function () {
     return {
       form: {
         username: '',
@@ -55,14 +55,14 @@ export default {
     }
   },
   methods: {
-    submitForm() {
+    submitForm () {
       this.$v.$touch()
-      if(this.$v.$invalid) {
-        return;
+      if (this.$v.$invalid) {
+        return
       }
       // TODO : 데이터 검증하기
       registrationService.register(this.form).then(() => {
-        this.$router.push({name: 'LoginPage'})
+        this.$router.push({ name: 'LoginPage' })
       }).catch((error) => {
         this.errorMessage = 'Failed to register user. Reason: ' +
         (error.message ? error.message : 'Unknown') + '.'

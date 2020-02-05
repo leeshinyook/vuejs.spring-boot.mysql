@@ -1,5 +1,5 @@
 export default {
-  register(detail) {
+  register (detail) {
     return new Promise((resolve, reject) => {
       detail.emailAddress === 'sunny@taskagile.com'
         ? resolve({ result: 'success' })
